@@ -15,6 +15,7 @@
     <meta name="description" content="">
     <!--Font Awesome-->
     <link rel="stylesheet" href="dist/font-awesome/css/font-awesome.min.css" />
+    <link href= "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.2/font/bootstrap-icons.min.css" rel="stylesheet"> 
     <!-- Custom CSS -->
     <link rel="stylesheet" type="text/css" href="css/main.min.css">
     <!--[if IE]>
