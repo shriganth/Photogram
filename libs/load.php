@@ -15,4 +15,8 @@ function load_template($name) {
     include_once $_SERVER['DOCUMENT_ROOT']."/photogram/templates/$name.php";
 }
 
+function load_image() {
+    include_once $_SERVER['DOCUMENT_ROOT']."/photogram/__Photogram_Images/";
+}
+
 ?>

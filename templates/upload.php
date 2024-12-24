@@ -1,42 +1,56 @@
-
 <?php
 
 include_once '/var/labsstorage/home/shriganth87/htdocs/photogram/libs/load.php';
 
-// Fetch image details from the database
-$result = Imagefiles::getImages();
-// print_r($result);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
+        $photoName = basename($_FILES['photo']['name']);
+        $photoType = $_FILES['photo']['type'];
+        $photoSize = $_FILES['photo']['size'];
+        $photoTmpName = $_FILES['photo']['tmp_name'];
 
-if ($result && $row = $result->fetch_assoc()) {
-    $photoName = htmlspecialchars($row['photoName']);
-    $photoType = htmlspecialchars($row['photoType']);
-    $photoSize = htmlspecialchars($row['photoSize']);
-    $uploaded_at = htmlspecialchars($row['uploaded_at']);
-    $photoData = base64_encode($row['photoData']); // Encode binary data to base64
-    $src = $row['photoName'];
-    print_r($src);
-} else {
-    $photoName = '';
-    $src = '';
-    $uploaded_at = 'No upload date available';
+        // Validate file type
+        if (in_array($photoType, ['image/jpeg', 'image/png', 'image/gif'])) {
+            $targetDir = '/var/labsstorage/home/shriganth87/htdocs/photogram/__Photogram_Images/';
+            $targetFile = $targetDir . $photoName;
+
+            // Debugging information
+            if (!is_dir($targetDir)) {
+                echo "Error: Target directory does not exist.";
+            } elseif (!is_writable($targetDir)) {
+                echo "Error: Target directory is not writable.";
+            } else {
+                if (move_uploaded_file($photoTmpName, $targetFile)) {
+                    $uploaded_at = date('Y-m-d H:i:s');
+                    echo "File uploaded successfully.";
+
+                    // Call Imagefiles::uploadImage for metadata
+                    $result = Imagefiles::uploadImage($photoName, $photoType, $photoSize, $targetFile, $uploaded_at);
+                } else {
+                    echo "Error: Failed to move uploaded file.";
+                }
+            }
+        } else {
+            echo "Error: Invalid file type.";
+        }
+    } else {
+        echo "Error uploading file.";
+    }
 }
+
 ?>
 
-<div class="card mb-4 box-shadow">
-    <?php if ($src): ?>
-        <img class="card-img-top img-thumbnail" src="<?php echo $src ?>" alt="Image for <?php echo $photoName ?>">
-    <?php else: ?>
-        <div class="card-img-top text-center" style="height: 200px; line-height: 200px; background-color: #f8f9fa;">
-            No Image Available
+<div class="container mb-3">
+    <form action="" method="POST" enctype="multipart/form-data">
+        <div class="input-group mb-3"> 
+            <label class="input-group-text" for="customFile"> 
+                <i class="bi bi-file-earmark-image"></i> 
+            </label> 
+            <input type="file" class="form-control visually-hidden photo"
+                id="photo" name="photo" accept="image/*" required> 
+            <button class="btn btn-success" type="submit"> 
+                Upload 
+            </button> 
         </div>
-    <?php endif; ?>
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
-                </div>
-                <small class="text-muted"><?php echo $uploaded_at ?></small>
-            </div>
-        </div>
+    </form>
 </div>
