@@ -22,7 +22,7 @@ $result = Imagefiles::getImages();
         ?>
                 <div class="col-md-4">
                     <div class="card mb-4 box-shadow">
-                        <img class="card-img-top img-thumbnail" src=<?php load_image().$src; ?> alt="Image for <?php echo $photoName ?>" width="50" height="50">
+                        <img class="card-img-top img-thumbnail" src="../../photogram/__Photogram_Images/<?php echo $photoName ?>" alt="Image for <?php echo $photoName ?>" width="50" height="50">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">

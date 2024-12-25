@@ -24,7 +24,7 @@ class Imagefiles {
 
     public static function getImages() {
         $conn = Database::getConnection();
-        $sql = "SELECT * FROM pdf_files";
+        $sql = "SELECT * FROM `pdf_files` ORDER BY `uploaded_at` DESC";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {

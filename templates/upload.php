@@ -22,10 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 if (move_uploaded_file($photoTmpName, $targetFile)) {
                     $uploaded_at = date('Y-m-d H:i:s');
-                    echo "File uploaded successfully.";
-
                     // Call Imagefiles::uploadImage for metadata
                     $result = Imagefiles::uploadImage($photoName, $photoType, $photoSize, $targetFile, $uploaded_at);
+                    echo "File uploaded successfully.";
                 } else {
                     echo "Error: Failed to move uploaded file.";
                 }
